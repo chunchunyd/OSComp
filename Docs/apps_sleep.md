@@ -1,7 +1,7 @@
 # INTRODUCTION
 | App | Extra modules | Enabled features | Description |
 |-|-|-|-|
-| [sleep](apps/task/sleep) |axalloc,axtask |multitask,paging | An app that call sys_sleep in many threads. |
+| [sleep](apps/task/sleep) |axalloc,axtask |alloc, paging, multitask, sched_fifo | Thread sleeping test |
 
 # RUN
 ```

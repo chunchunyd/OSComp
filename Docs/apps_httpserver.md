@@ -1,7 +1,7 @@
 # INTRODUCTION
 | App | Extra modules | Enabled features | Description |
 |-|-|-|-|
-| [httpserver](apps/net/httpserver) | axnet, axdriver | paging, net      | Open a server and keep listening to a certain local port. |
+| [httpserver](apps/net/httpserver) | axalloc, axnet, axdriver, axtask | alloc, paging, net, multitask | A multi-threaded HTTP server that serves a static web page |
 
 
 # RUN
