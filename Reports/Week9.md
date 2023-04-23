@@ -48,7 +48,7 @@
 
 要实现文件相关的系统调用，还是要先支持最基础的用户态分离
 
-## 3. 实现了open,write，正在实现close
+## 3. 实现了open, write，close
 
 ### 1. 在用户库添加对应的系统调用
 
@@ -66,7 +66,7 @@ pub fn sys_close(fd: usize) -> isize {
 
 ```
 
-### 2. 在axfs为close添加支持，主要是写回磁盘
+### 2. 在axfs为close添加支持
 
 在File的Drop trait方法中修改，添加fflush。
 
@@ -92,7 +92,7 @@ impl Drop for File {
 }
 ```
 
-到这里发现vfs里的fsync似乎还没实现
+到这里发现vfs里的fsync似乎还没实现, 只有一个trait。
 
 ### 3.
 
