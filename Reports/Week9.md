@@ -170,6 +170,12 @@ impl Drop for File {
 
 ### 3.在axhal里对syscall进行分发。
 ### 4.将syswrite的参数改为特征对象`dyn File+Send+Sync`，统一标准输入输出流和文件输入输出流。
+```Rust
+pub trait File : Send + Sync {
+    fn read(&self, buf: UserBuffer) -> usize;
+    fn write(&self, buf: UserBuffer) -> usize;
+}
+```
 
 
 
