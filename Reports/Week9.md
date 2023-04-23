@@ -39,8 +39,71 @@
    ```
 
 3. 发现了一些可能的bug；
+例如目录的lookup方法里递归调用时发生了死循环，添加了额外的判断条件。
+```
+pub(crate) fn lookup(dir: Option<&VfsNodeRef>, path: &str) -> AxResult<VfsNodeRef> {
+    if path.is_empty() {
+        return ax_err!(NotFound);
+    }
+    let node = parent_node_of(dir, path).lookup(path)?;
+    if path.ends_with('/') && !node.get_attr()?.is_dir() {
+        ax_err!(NotADirectory)
+    } else {
+        Ok(node)
+    }
+}
+```
+```
+pub(crate) fn lookup(dir: Option<&VfsNodeRef>, path: &str) -> AxResult<VfsNodeRef> {
+     // 首先判断绝对路径,如果是,直接在根目录查找
+     if path.starts_with('/') { 
+         return _ROOT_DIR_.lookup(path); 
+     }
+     // ...
+ }
+ ```
+
 
 4. 尝试实现了学长留下的一些TODO，比如用字典树记录、查找挂载点;
+```
+struct PathTrie {
+     children: BTreeMap<char, PathTrie>,
+     mount_point: Option<MountPoint>,
+ }
+ 
+impl PathTrie {
+     fn insert(&mut self, path: &str, mp: MountPoint) {
+         let mut node = self;
+         for c in path.chars() {
+             if let Some(child) = node.children.get_mut(&c) {
+                 node = child;
+             } else {
+                 let child = PathTrie::default();
+                 node.children.insert(c, child);
+                 node = &mut child;
+             }
+         }
+         node.mount_point = Some(mp);
+     }
+ 
+     fn longest_prefix(&self, path: &str) -> Option<(usize, &MountPoint)> {
+         let mut node = self;
+         let mut len = 0;
+         for c in path.chars() {
+             if let Some(child) = node.children.get(&c) {
+                 node = child;
+                 len += 1;
+                 if node.mount_point.is_some() {
+                     return Some((len, node.mount_point.as_ref().unwrap()));
+                 }
+             } else {
+                 break;
+             }
+         }
+         None
+     }
+ }
+```
 
 5. 正在分析学习它依赖的fatfs库。
 
@@ -49,6 +112,17 @@
 要实现文件相关的系统调用，还是要先支持最基础的用户态分离
 
 ## 3. 实现了open, write，close
+### 0. 文件描述符表
+```
+struct FileDesc {
+     file: fs::File,
+     flags: i32,
+ }
+
+struct FileTable {
+     table: Vec<FileDesc>,
+ }
+```
 
 ### 1. 在用户库添加对应的系统调用
 
@@ -92,9 +166,10 @@ impl Drop for File {
 }
 ```
 
-到这里发现vfs里的fsync似乎还没实现, 只有一个trait。
+到这里发现vfs里的fsync似乎还没实现, 只有一个trait。写回磁盘并未实际进行。
 
-### 3.
+### 3.在axhal里对syscall进行分发。
+### 4.将syswrite的参数改为特征对象，统一标准输入输出流和文件输入输出流。
 
 
 
