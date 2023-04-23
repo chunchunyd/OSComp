@@ -57,7 +57,7 @@ pub(crate) fn lookup(dir: Option<&VfsNodeRef>, path: &str) -> AxResult<VfsNodeRe
 pub(crate) fn lookup(dir: Option<&VfsNodeRef>, path: &str) -> AxResult<VfsNodeRef> {
      // 首先判断绝对路径,如果是,直接在根目录查找
      if path.starts_with('/') { 
-         return _ROOT_DIR_.lookup(path); 
+         return ROOT_DIR.lookup(path); 
      }
      // ...
  }
