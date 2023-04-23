@@ -40,7 +40,7 @@
 
 3. 发现了一些可能的bug；
 例如目录的lookup方法里递归调用时发生了死循环，添加了额外的判断条件。
-```
+```Rust
 pub(crate) fn lookup(dir: Option<&VfsNodeRef>, path: &str) -> AxResult<VfsNodeRef> {
     if path.is_empty() {
         return ax_err!(NotFound);
@@ -65,7 +65,7 @@ pub(crate) fn lookup(dir: Option<&VfsNodeRef>, path: &str) -> AxResult<VfsNodeRe
 
 
 4. 尝试实现了学长留下的一些TODO，比如用字典树记录、查找挂载点;
-```
+```Rust
 struct PathTrie {
      children: BTreeMap<char, PathTrie>,
      mount_point: Option<MountPoint>,
@@ -109,11 +109,11 @@ impl PathTrie {
 
 ## 2. 实现了用户态与内核态的分离
 
-要实现文件相关的系统调用，还是要先支持最基础的用户态分离
+要实现文件相关的系统调用，还是要先支持最基础的用户态分离。
 
 ## 3. 实现了open, write，close
 ### 0. 文件描述符表
-```
+```Rust
 struct FileDesc {
      file: fs::File,
      flags: i32,
@@ -166,10 +166,10 @@ impl Drop for File {
 }
 ```
 
-到这里发现vfs里的fsync似乎还没实现, 只有一个trait。写回磁盘并未实际进行。
+到这里发现vfs里的fsync似乎还没实现, 看上去只在trait里声明了，写回磁盘并未实际进行。
 
 ### 3.在axhal里对syscall进行分发。
-### 4.将syswrite的参数改为特征对象，统一标准输入输出流和文件输入输出流。
+### 4.将syswrite的参数改为特征对象`dyn File+Send+Sync`，统一标准输入输出流和文件输入输出流。
 
 
 
