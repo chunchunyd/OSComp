@@ -38,33 +38,8 @@
    - read_link() - 读取符号链接目标
    ```
 
-3. 发现了一些可能的bug；
-例如目录的lookup方法里递归调用时发生了死循环，添加了额外的判断条件。
-```Rust
-pub(crate) fn lookup(dir: Option<&VfsNodeRef>, path: &str) -> AxResult<VfsNodeRef> {
-    if path.is_empty() {
-        return ax_err!(NotFound);
-    }
-    let node = parent_node_of(dir, path).lookup(path)?;
-    if path.ends_with('/') && !node.get_attr()?.is_dir() {
-        ax_err!(NotADirectory)
-    } else {
-        Ok(node)
-    }
-}
-```
-```Rust
-pub(crate) fn lookup(dir: Option<&VfsNodeRef>, path: &str) -> AxResult<VfsNodeRef> {
-     // 首先判断绝对路径,如果是,直接在根目录查找
-     if path.starts_with('/') { 
-         return ROOT_DIR.lookup(path); 
-     }
-     // ...
- }
- ```
+3. 尝试实现了学长留下的一些TODO，比如用字典树记录、查找挂载点;
 
-
-4. 尝试实现了学长留下的一些TODO，比如用字典树记录、查找挂载点;
 ```Rust
 struct PathTrie {
      children: BTreeMap<char, PathTrie>,
@@ -105,7 +80,7 @@ impl PathTrie {
  }
 ```
 
-5. 正在分析学习它依赖的fatfs库。
+4. 正在分析学习它依赖的fatfs库。
 
 ## 2. 实现了用户态与内核态的分离
 
