@@ -1,6 +1,7 @@
 # Week14 Report
 
 ## 1. 完成初赛
+![image](https://github.com/chunchunyd/OSComp/assets/80908379/27ccd4ae-0ed8-465a-a7b5-89fd4c39db7f)
 
 1. 解决所有已知bug；
 2. 依赖库本地化并采用--offline构建，适应测试平台环境，修改makefile，在容器内生成内核；
