@@ -1,6 +1,7 @@
 # Week14 Report
 
 ## 1. 完成初赛
+![image](https://github.com/chunchunyd/OSComp/assets/80908379/27ccd4ae-0ed8-465a-a7b5-89fd4c39db7f)
 
 1. 解决所有已知bug；
 2. 依赖库本地化并采用--offline构建，适应测试平台环境，修改makefile，在容器内生成内核；
@@ -23,8 +24,8 @@ DISK_DIR=libc make testcases-img
 
 1. 尝试用已有的syscall实现一个简单的用户程序shell
 
-   ![image-20230528053739721](C:\Users\hawan\AppData\Roaming\Typora\typora-user-images\image-20230528053739721.png)
+![image-20230528053739721](https://github.com/chunchunyd/OSComp/assets/80908379/fee3d9de-1814-4b61-91c3-58ea9ec138e2)
 
-   ![image-20230528053915595](C:\Users\hawan\AppData\Roaming\Typora\typora-user-images\image-20230528053915595.png)
+![image-20230528053915595](https://github.com/chunchunyd/OSComp/assets/80908379/c07bb7be-00e5-4382-adca-f6a418f19a61)
 
 在shell里实现了echo,ls,exit三个简单的功能。
